@@ -1,38 +1,43 @@
-import { ProductsService } from "../../services/products-services";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import AddToCartButton from "../../components/cartButton/CartButton";
 
-type Props = {
-  params: Promise<{
-    productId: string;
-  }>;
-};
+export default function ProductDetail() {
+  const params = useParams();
+  const id = Number(params?.productId);
 
-export default async function ProductDetail({ params }: Props) {
-  
-  const { productId } = await params;
+  const [product, setProduct] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  const id = Number(productId);
+  useEffect(() => {
+    if (!id) return;
 
-  if (!id) {
+    fetch(`https://fakestoreapi.com/products/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setProduct(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setProduct(null);
+        setLoading(false);
+      });
+  }, [id]);
+
+  if (loading) {
     return (
-      <div className="container py-5 text-center">
-        <h3>Invalid Product ID</h3>
+      <div className="text-center py-5">
+        Loading product...
       </div>
     );
   }
 
-  let product = null;
-
-  try {
-    product = await ProductsService.getProductById(id);
-  } catch (error) {
-    console.log("Error loading product:", error);
-  }
-
   if (!product) {
     return (
-      <div className="container py-5 text-center">
-        <h3>Product not found</h3>
+      <div className="text-center py-5">
+        Product not found
       </div>
     );
   }
@@ -40,16 +45,12 @@ export default async function ProductDetail({ params }: Props) {
   return (
     <div className="container py-5">
       <div className="row">
-
         <div className="col-md-5 text-center">
           <img
             src={product.image}
             alt={product.title}
             className="img-fluid"
-            style={{
-              maxHeight: "450px",
-              objectFit: "contain",
-            }}
+            style={{ maxHeight: "450px", objectFit: "contain" }}
           />
         </div>
 
@@ -66,15 +67,12 @@ export default async function ProductDetail({ params }: Props) {
 
           <hr />
 
-          <h5>Description</h5>
-
           <p className="text-muted">
             {product.description}
           </p>
 
           <AddToCartButton product={product} />
         </div>
-
       </div>
     </div>
   );
