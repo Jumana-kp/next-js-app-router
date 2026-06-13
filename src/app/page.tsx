@@ -1,5 +1,5 @@
 import Banner from "./components/banner/Banner";
-// import OfferPage from "./components/offerPage/OfferPage";
+import OfferPage from "./components/offerPage/OfferPage";
 
 import type { Metadata } from "next";
 
@@ -12,7 +12,7 @@ export default function HomePage() {
   return (
     <>
       <Banner/>
-      {/* <OfferPage/> */}
+      <OfferPage/> 
       <div className="row g-4">
         <div className="col-md-4">
           <div className="card text-center p-4">
