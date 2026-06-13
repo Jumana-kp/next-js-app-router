@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+
 import Link from "next/link";
 
 export default function Banner() {
@@ -41,7 +41,7 @@ export default function Banner() {
 
         {/* Slide 1 */}
         <div className="carousel-item active">
-          <Image
+          <img
             src="/next1.jpg"
             alt="Welcome to NextCart"
             width={1200}
@@ -51,7 +51,7 @@ export default function Banner() {
               height: "500px",
               objectFit: "cover",
             }}
-            priority
+          
           />
 
           <div className="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-3">
@@ -74,7 +74,7 @@ export default function Banner() {
 
         {/* Slide 2 */}
         <div className="carousel-item">
-          <Image
+          <img
             src="/next2.jpg"
             alt="Electronics"
             width={1200}
@@ -106,7 +106,7 @@ export default function Banner() {
 
         {/* Slide 3 */}
         <div className="carousel-item">
-          <Image
+          <img
             src="/next3.jpg"
             alt="Fashion Collection"
             width={1200}
