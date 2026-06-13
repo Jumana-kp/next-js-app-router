@@ -6,6 +6,9 @@ export class ProductsService extends ServiceBase {
       this.getUrl("/products"),
       {
         cache: "no-store",
+        headers: {
+          Accept: "application/json",
+        },
       }
     );
 
@@ -22,7 +25,9 @@ export class ProductsService extends ServiceBase {
     const response = await fetch(
       this.getUrl(`/products/${id}`),
       {
-        cache: "no-store",
+        headers: {
+          Accept: "application/json",
+        },
       }
     );
 
