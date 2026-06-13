@@ -2,43 +2,36 @@ import { ProductsService } from "../../services/products-services";
 import AddToCartButton from "../../components/cartButton/CartButton";
 
 type Props = {
-  params: {
+  params: Promise<{
     productId: string;
-  };
+  }>;
 };
 
-export async function generateMetadata({ params }: Props) {
-  const productId = Number(params.productId);
+export default async function ProductDetail({ params }: Props) {
+  
+  const { productId } = await params;
 
-  if (!productId) {
-    return {
-      title: "Product detail page",
-    };
+  const id = Number(productId);
+
+  if (!id) {
+    return (
+      <div className="container py-5 text-center">
+        <h3>Invalid Product ID</h3>
+      </div>
+    );
   }
+
+  let product = null;
 
   try {
-    const product =
-      await ProductsService.getProductById(productId);
-
-    return {
-      title: product.title,
-    };
-  } catch {
-    return {
-      title: "Product not found",
-    };
+    product = await ProductsService.getProductById(id);
+  } catch (error) {
+    console.log("Error loading product:", error);
   }
-}
-
-export default async function ProductDetail({ params }: Props) {
-  const productId = Number(params.productId);
-
-  const product =
-    await ProductsService.getProductById(productId);
 
   if (!product) {
     return (
-      <div className="container py-5">
+      <div className="container py-5 text-center">
         <h3>Product not found</h3>
       </div>
     );
@@ -47,6 +40,7 @@ export default async function ProductDetail({ params }: Props) {
   return (
     <div className="container py-5">
       <div className="row">
+
         <div className="col-md-5 text-center">
           <img
             src={product.image}
@@ -80,6 +74,7 @@ export default async function ProductDetail({ params }: Props) {
 
           <AddToCartButton product={product} />
         </div>
+
       </div>
     </div>
   );

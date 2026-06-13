@@ -1,58 +1,43 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ProductsService } from "../../services/products-services";
 
-export default async function OfferPage() {
-  const products = await ProductsService.getProducts();
+export default function OfferPage() {
+  const [products, setProducts] = useState<any[]>([]);
 
-  const offerProducts = products.slice(0, 4);
+  useEffect(() => {
+    fetch("https://fakestoreapi.com/products")
+      .then((res) => res.json())
+      .then((data) => setProducts(data.slice(0, 4)))
+      .catch(() => setProducts([]));
+  }, []);
 
   return (
     <section className="container py-5">
       <div className="text-center mb-4">
         <h2>🔥 Special Offers</h2>
-        <p className="text-muted">
-          Limited time deals on selected products
-        </p>
       </div>
 
       <div className="row g-4">
-        {offerProducts.map((product: any) => (
-          <div
-            key={product.id}
-            className="col-12 col-sm-6 col-lg-3"
-          >
-            <div className="card h-100 shadow-sm">
-              <div
-                className="d-flex justify-content-center align-items-center p-3"
-                style={{ height: "200px" }}
+        {products.map((product: any) => (
+          <div key={product.id} className="col-12 col-sm-6 col-lg-3">
+            <div className="card p-3 text-center">
+              <img
+                src={product.image}
+                alt={product.title}
+                style={{ height: 120, objectFit: "contain" }}
+              />
+
+              <h6 className="mt-2">{product.title}</h6>
+              <p className="text-success">${product.price}</p>
+
+              <Link
+                href={`/products/${product.id}`}
+                className="btn btn-primary"
               >
-                <img
-                  src={product.image}
-                  alt={product.title}
-                  className="img-fluid"
-                  style={{
-                    maxHeight: "150px",
-                    objectFit: "contain",
-                  }}
-                />
-              </div>
-
-              <div className="card-body text-center">
-                <Link
-                  href={`/products/${product.id}`}
-                  className="text-decoration-none text-primary"
-                >
-                  <h6>{product.title}</h6>
-                </Link>
-
-                <h5 className="text-success">
-                  ${product.price}
-                </h5>
-
-                <span className="badge bg-danger">
-                  20% OFF
-                </span>
-              </div>
+                View
+              </Link>
             </div>
           </div>
         ))}

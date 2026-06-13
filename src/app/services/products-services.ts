@@ -1,25 +1,35 @@
-import { ServiceBase } from "./service-base";
+export class ProductsService {
 
-export class ProductsService extends ServiceBase {
   static async getProducts() {
-    const response = await fetch(this.getUrl("/products"), {
-      cache: "no-store",
-    });
+    try {
+      const res = await fetch("https://fakestoreapi.com/products", {
+        cache: "no-store",
+      });
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch products: ${response.status}`);
+      const text = await res.text();
+      if (!text) return [];
+
+      return JSON.parse(text);
+    } catch (err) {
+      console.log("Products error:", err);
+      return [];
     }
-
-    return response.json();
   }
 
   static async getProductById(id: number) {
-    const response = await fetch(this.getUrl(`/products/${id}`));
+    try {
+      const res = await fetch(
+        `https://fakestoreapi.com/products/${id}`,
+        { cache: "no-store" }
+      );
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch product: ${response.status}`);
+      const text = await res.text();
+      if (!text) return null;
+
+      return JSON.parse(text);
+    } catch (err) {
+      console.log("Product error:", err);
+      return null;
     }
-
-    return response.json();
   }
 }
